@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import useSWR from "swr";
 import { 
   Box, 
@@ -29,7 +30,7 @@ import api from "@/utils/api";
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const [q, setQ] = useState("");
   const [category, setCategory] = useState("");
@@ -303,5 +304,13 @@ export default function ProductsPage() {
         </Box>
       )}
     </Container>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<Container maxWidth="lg" sx={{ py: 8 }}><Typography>Loading...</Typography></Container>}>
+      <ProductsContent />
+    </Suspense>
   );
 }
